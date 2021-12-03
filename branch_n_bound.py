@@ -4,6 +4,7 @@ import time
 import os
 import math
 import argparse
+import matplotlib.pyplot as plt
 
 # parsing input files
 def parse(data_file):
@@ -96,7 +97,6 @@ def Branch_and_Bound(G, T):
                     else:  # back track to the root node
                         Current_Graph = G.copy()
                         Current_VC.clear()
-
         end_time = time.time()
         time_diff = end_time - start_time
         if time_diff > T:
@@ -104,11 +104,24 @@ def Branch_and_Bound(G, T):
     print (Best_Vertex_Cover)
     return (Best_Vertex_Cover, times_list)
 
+def plot_graph(graph, name):
+    g = nx.Graph()
+    for k, vs in dict(graph).items():
+        for v in vs:
+            g.add_edge(k, v)
+    nx.draw_networkx(g, pos=nx.circular_layout(g))
+    plt.show()
+
+
 
 graphBinomial = nx.generators.classic.binomial_tree(4)
-G = nx.Graph()
-G.add_nodes_from(range(1,7))
-G.add_edges_from([(1,2),(2,3),(1,4),(3,5),(2,6),(6,7),(6,8),(7,8)])
-v = len(G.nodes())
+graphbalanced = nx.generators.classic.balanced_tree(4, 2)
+graphStar = nx.star_graph(10)
+graph_barabasi_albert = nx.barabasi_albert_graph(50, 3)
+graph_erdos_renyi = nx.erdos_renyi_graph(5, 0.9, seed=None, directed=False)
+graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 7, 0.7, seed=None)
 
-Branch_and_Bound(graphBinomial, 600)
+print("Vertices:", len(graph_erdos_renyi.nodes), "Edges:", len(graph_erdos_renyi.edges))
+
+Branch_and_Bound(graph_erdos_renyi, 600)
+plot_graph(nx.to_dict_of_dicts(graph_erdos_renyi), "plots/Graph")
