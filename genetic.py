@@ -1,12 +1,10 @@
-
-
-# https://github.com/ameya98/GeneticAlgorithmsRepo
-
 import networkx as nx
 import numpy as np
 from random import randint, uniform, choice, shuffle
 import matplotlib.pyplot as plt
 from networkx.algorithms import approximation
+
+# https://github.com/ameya98/GeneticAlgorithmsRepo
 
 # global configuration settings
 # note: keep population_size and elite_population_size of same parity
@@ -15,12 +13,18 @@ elite_population_size = 8
 mutation_probability = 0.04
 num_iterations = 5
 
-# create graph G - a networkx undirected graph
-# G = nx.gnp_random_graph(num_vertices, 0.2)
-# G = nx.karate_club_graph()
-G = nx.generators.classic.binomial_tree(4)
-#G = nx.gnm_random_graph(1000, 500)
-print(len(G.nodes), len(G.edges))
+# Graphs
+graphBinomial = nx.generators.classic.binomial_tree(4)
+graphbalanced = nx.generators.classic.balanced_tree(4, 2)
+graphStar = nx.star_graph(10)
+graph_barabasi_albert = nx.barabasi_albert_graph(20, 10)
+graph_erdos_renyi = nx.erdos_renyi_graph(20, 0.7, seed=None, directed=False)
+graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 7, 0.7, seed=None)
+
+print("Vertices:", len(graphBinomial.nodes), "Edges:", len(graphBinomial.edges))
+G = graphBinomial
+#MVC_algorithm = nx.to_dict_of_dicts(graph_newman_watts_strogatz)
+
 
 
 # a weighted choice function
@@ -32,7 +36,6 @@ def weighted_choice(choices, weights):
         total -= normalized_weight
         if total < threshold:
             return choices[index]
-
 
 # Vertex Cover class definition
 class VertexCover:
@@ -141,7 +144,6 @@ class VertexCover:
 
     def __iter__(self):
         return iter(self.vertexlist)
-
 
 # class for the 'population' of vertex covers
 class Population:
@@ -254,23 +256,17 @@ class Population:
 def crossover(parent1, parent2):
     if parent1.associated_population != parent2.associated_population:
         raise ValueError("Vertex covers belong to different populations.")
-
     child1 = VertexCover(parent1.associated_population)
     child2 = VertexCover(parent2.associated_population)
-
     # find the point to split and rejoin the chromosomes
     # note that chromosome number + 1 is the actual length of the chromosome in each vertex cover encoding
     split_point = randint(0, min(parent1.chromosomenumber, parent2.chromosomenumber))
-
-
     # actual splitting and recombining
     child1.chromosomes = parent1.chromosomes[:split_point] + parent2.chromosomes[split_point:]
     child2.chromosomes = parent2.chromosomes[:split_point] + parent1.chromosomes[split_point:]
-
     # evaluate fitnesses
     child1.evaluate_fitness()
     child2.evaluate_fitness()
-
     return child1, child2
 
 
@@ -287,7 +283,6 @@ def is_valid_vertex_cover(vertex_cover):
         print("Valid!")
 
 
-# main logic begins here #
 # initialise vertex cover population
 population = Population(G, population_size)
 population.evaluate_fitness_ranks()
@@ -302,36 +297,36 @@ plot_diversity = [population.mean_diversity]
 #     print(vertex_cover.chromosomenumber)
 
 # print the initial stats
-print("Initial Population")
-print("Mean fitness =", population.mean_fitness)
-print("Mean L1 diversity =", population.mean_diversity)
-print("Mean VC size =", population.mean_vertex_cover_size)
-print()
+# print("Initial Population")
+# print("Mean fitness =", population.mean_fitness)
+# print("Mean L1 diversity =", population.mean_diversity)
+# print("Mean VC size =", population.mean_vertex_cover_size)
+# print()
 
 # breed and mutate this population num_iterations times
 for iteration in range(1, num_iterations + 1):
-
-    # DEBUG - check if all valid vertex covers
-    # for vertex_cover in population.vertexcovers:
-    #     is_valid_vertex_cover(vertex_cover)
-
     population.breed()
     population.mutate()
-
     # find the new ranks
     population.evaluate_fitness_ranks()
     population.evaluate_diversity_ranks()
-
     # add to the plot
     plot_fitness.append(population.mean_fitness)
     plot_diversity.append(population.mean_diversity)
-
     # print the updated stats
-    print("Iteration", iteration)
-    print("Mean fitness =", population.mean_fitness)
-    print("Mean L1 diversity =", population.mean_diversity)
-    print("Mean VC size =", population.mean_vertex_cover_size)
-    print()
+    # print("Iteration", iteration)
+    # print("Mean fitness =", population.mean_fitness)
+    # print("Mean L1 diversity =", population.mean_diversity)
+    # print("Mean VC size =", population.mean_vertex_cover_size)
+    # print()
+
+def plot_graph(graph, name):
+    g = nx.Graph()
+    for k, vs in dict(graph).items():
+        for v in vs:
+            g.add_edge(k, v)
+    nx.draw_networkx(g, pos=nx.circular_layout(g))
+    plt.show()
 
 # vertex cover with best fitness is our output
 best_vertex_cover = None
@@ -342,22 +337,21 @@ for vertex_cover in population.vertexcovers:
 
 print("Best Vertex Cover Size =", len(best_vertex_cover))
 print("Best Vertex Cover = ", best_vertex_cover.vertexlist)
+# print("approximation=", len(approximation.min_weighted_vertex_cover(G)))
+print ("approximation ratio", len(best_vertex_cover)/len(approximation.min_weighted_vertex_cover(G)))
+plot_graph(nx.to_dict_of_dicts(G), "plots/Graph")
 
-print("networkx approximation =", len(approximation.min_weighted_vertex_cover(G)))
 
-#is_valid_vertex_cover(best_vertex_cover)
 
 # plotting again
 # plot population stats
 # plt.subplot(2, 1, 1)
 # plt.title("Mean Population Stats")
-#
-#
+
 # plt.plot(range(num_iterations + 1), plot_fitness, 'b--',)
 # plt.ylabel('Fitness')
-#
+
 # plt.subplot(2, 1, 2)
 # plt.plot(range(num_iterations + 1), plot_diversity, 'r--')
 # plt.ylabel('L1 diversity')
-
 # plt.show()
