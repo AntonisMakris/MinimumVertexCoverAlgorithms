@@ -3,33 +3,18 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from operator import itemgetter
 
-
-# Graphs: https://networkx.org/documentation/stable/reference/generated/networkx.generators.random_graphs.erdos_renyi_graph.html
-# Approximation: https://edutechlearners.com/download/Introduction_to_algorithms-3rd%20Edition.pdf
-
-
 # Graphs
 graphBinomial = nx.generators.classic.binomial_tree(4)
-graphbalanced = nx.generators.classic.balanced_tree(8, 2)
+graphbalanced = nx.generators.classic.balanced_tree(4, 2)
 graphStar = nx.star_graph(10)
-graph_barabasi_albert = nx.barabasi_albert_graph(10, 5)
-graph_erdos_renyi = nx.erdos_renyi_graph(10, 0.9, seed=None, directed=False)
-graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 2, 0.5, seed=None)
+graph_barabasi_albert = nx.barabasi_albert_graph(20, 10)
+graph_erdos_renyi = nx.erdos_renyi_graph(20, 0.7, seed=None, directed=False)
+graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 7, 0.7, seed=None)
 
+print("Vertices:", len(graph_newman_watts_strogatz.nodes), "Edges:", len(graph_newman_watts_strogatz.edges))
+MVC_algorithm = nx.to_dict_of_dicts(graph_newman_watts_strogatz)
+graph_name_used_for_plot = graph_newman_watts_strogatz
 
-MVC_algorithm = nx.to_dict_of_dicts(graph_erdos_renyi)
-graph_name_used_for_plot = graph_erdos_renyi
-
-def vertex_cover_degrees(graph, res):
-    edges = generate_edges(graph)
-    degrees = count_degrees(edges, list(dict(graph).keys()))
-    degrees_sorted = sorted(degrees.items(), key=itemgetter(1), reverse=True)
-    cover_ = []
-    for v in degrees_sorted:
-        cover_.append(v[0])
-        if verify_vertex_cover(cover_, edges):
-            res.append(cover_)
-            return
 
 # vertex_cover_brute checks all possible sets of vertices of size k for a valid cover
 def vertex_cover_brute(graph, res):
@@ -50,23 +35,6 @@ def vertex_cover_brute(graph, res):
     # no cover was found so return set of all edges as minimal cover
     #res.append(vertices)
 
-# vertex_cover_approx
-# Generates an approximately optimal vertex cover for a given graph using the APPROX-VERTEX-COVER algorithm
-# found in (Cormen)
-def vertex_cover_approx(graph, size_, res):
-    # generate all edges present in graph
-    edges = generate_edges(graph)
-    s = 0
-    cover_ = []
-    for edge in edges:
-        if edge[0] not in cover_ and edge[1] not in cover_:
-            cover_.append(edge[0])
-            cover_.append(edge[1])
-            s += 2
-    size_.append(s)
-    res.append(cover_)
-
-# gen_subsets(set,k)
 # Generates all subsets of size k for the set given
 # The subsets are generated in increasing size
 def gen_subsets(set_, k):
@@ -125,42 +93,13 @@ def plot_graph(graph, name):
     nx.draw_networkx(g, pos=nx.circular_layout(g))
     plt.show()
 
-
-
-labels = ['Graph', 'Algorithm', 'Running Time (ms)', 'Approximation Ratio', 'Cover']
-table_data = []
-graphConnected_data_b = ['Brute Force']
-graphConnected_data_a = ['Approximation']
-graphConnected_data_d = ['Degree Heuristic']
+graphConnected_data_Brute = ['Brute Force']
 
 coverConnected = []
 time = timeit.timeit('vertex_cover_brute(MVC_algorithm, coverConnected)', number=1, globals=globals())
 print (time)
-graphConnected_data_b.append("{0:.3f}".format(time*1000))
-graphConnected_data_b.append(1.0)
-graphConnected_data_b.append(coverConnected[0])
-print (graphConnected_data_b)
-
-time = 0.0
-size = []
-cover_approx = []
-time = timeit.timeit('vertex_cover_approx(MVC_algorithm, size, cover_approx)', number=1, globals=globals())
-ratio = size[0]/6
-graphConnected_data_a.append("{0:.3f}".format(time*1000))
-graphConnected_data_a.append("{0:.3f}".format(ratio))
-graphConnected_data_a.append(cover_approx[0])
-print (graphConnected_data_a)
-
-cover_degree = []
-time = timeit.timeit('vertex_cover_degrees(MVC_algorithm, cover_degree)', number=1, globals=globals())
-ratio = len(cover_degree[0])/6
-graphConnected_data_d.append("{0:.3f}".format(time*1000))
-graphConnected_data_d.append("{0:.3f}".format(ratio))
-graphConnected_data_d.append(cover_degree[0])
-print(graphConnected_data_d)
-
-table_data.append(graphConnected_data_b)
-table_data.append(graphConnected_data_a)
-table_data.append(graphConnected_data_d)
-
+graphConnected_data_Brute.append("{0:.3f}".format(time*1000))
+graphConnected_data_Brute.append(1.0)
+graphConnected_data_Brute.append(coverConnected[0])
+print (graphConnected_data_Brute)
 plot_graph(nx.to_dict_of_dicts(graph_name_used_for_plot), "plots/Graph")

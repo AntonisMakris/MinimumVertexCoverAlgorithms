@@ -1,7 +1,6 @@
-# Genetic Algorithms - Vertex Cover #
-# Author: Ameya Daigavane #
-# Date: 26th April, 2018 #
-# An implementation of the genetic algorithm given in 'Evolutionary Algorithms for Vertex Cover' by Isaac K. Evans #
+
+
+# https://github.com/ameya98/GeneticAlgorithmsRepo
 
 import networkx as nx
 import numpy as np
@@ -19,7 +18,8 @@ num_iterations = 5
 # create graph G - a networkx undirected graph
 # G = nx.gnp_random_graph(num_vertices, 0.2)
 # G = nx.karate_club_graph()
-G = nx.gnm_random_graph(1000, 500)
+G = nx.generators.classic.binomial_tree(4)
+#G = nx.gnm_random_graph(1000, 500)
 print(len(G.nodes), len(G.edges))
 
 
@@ -345,17 +345,19 @@ print("Best Vertex Cover = ", best_vertex_cover.vertexlist)
 
 print("networkx approximation =", len(approximation.min_weighted_vertex_cover(G)))
 
-# just to check
-# is_valid_vertex_cover(best_vertex_cover)
+#is_valid_vertex_cover(best_vertex_cover)
 
 # plotting again
 # plot population stats
-plt.subplot(2, 1, 1)
-plt.title("Mean Population Stats")
+# plt.subplot(2, 1, 1)
+# plt.title("Mean Population Stats")
+#
+#
+# plt.plot(range(num_iterations + 1), plot_fitness, 'b--',)
+# plt.ylabel('Fitness')
+#
+# plt.subplot(2, 1, 2)
+# plt.plot(range(num_iterations + 1), plot_diversity, 'r--')
+# plt.ylabel('L1 diversity')
 
-plt.plot(range(num_iterations + 1), plot_fitness, 'b--',)
-plt.ylabel('Fitness')
-
-plt.subplot(2, 1, 2)
-plt.plot(range(num_iterations + 1), plot_diversity, 'r--')
-plt.ylabel('L1 diversity')
+# plt.show()
