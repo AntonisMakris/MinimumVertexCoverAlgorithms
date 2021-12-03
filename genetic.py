@@ -21,8 +21,8 @@ graph_barabasi_albert = nx.barabasi_albert_graph(20, 10)
 graph_erdos_renyi = nx.erdos_renyi_graph(20, 0.7, seed=None, directed=False)
 graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 7, 0.7, seed=None)
 
-print("Vertices:", len(graphBinomial.nodes), "Edges:", len(graphBinomial.edges))
-G = graphBinomial
+print("Vertices:", len(graph_barabasi_albert.nodes), "Edges:", len(graph_barabasi_albert.edges))
+G = graph_barabasi_albert
 #MVC_algorithm = nx.to_dict_of_dicts(graph_newman_watts_strogatz)
 
 
