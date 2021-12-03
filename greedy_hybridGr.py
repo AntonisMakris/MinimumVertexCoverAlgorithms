@@ -6,8 +6,6 @@ from networkx.algorithms import approximation
 from heapq import heapify, heappop
 import sys
 
-# https://github.com/danielslz/minimum-vertex-cover
-
 class Heap():
     # data format: [node_degree, node_index]
     heap = []

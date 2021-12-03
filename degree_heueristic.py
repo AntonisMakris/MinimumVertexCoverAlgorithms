@@ -3,8 +3,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from operator import itemgetter
 
-
-# https://github.com/sedgwickc/VertexCoverSearch
 # Graphs: https://networkx.org/documentation/stable/reference/generated/networkx.generators.random_graphs.erdos_renyi_graph.html
 
 # Graphs

@@ -4,8 +4,6 @@ from random import randint, uniform, choice, shuffle
 import matplotlib.pyplot as plt
 from networkx.algorithms import approximation
 
-# https://github.com/ameya98/GeneticAlgorithmsRepo
-
 # global configuration settings
 # note: keep population_size and elite_population_size of same parity
 population_size = 30
