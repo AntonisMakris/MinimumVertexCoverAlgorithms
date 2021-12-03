@@ -3,8 +3,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from operator import itemgetter
 
-# Graphs: https://networkx.org/documentation/stable/reference/generated/networkx.generators.random_graphs.erdos_renyi_graph.html
-
 # Graphs
 graphBinomial = nx.generators.classic.binomial_tree(4)
 graphbalanced = nx.generators.classic.balanced_tree(4, 2)
