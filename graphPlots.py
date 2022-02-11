@@ -2,9 +2,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-
-
-
 def barabasi():
     n = 50
     m = 5
@@ -13,13 +10,25 @@ def barabasi():
     nx.draw(G_barabasi, node_size=4)
     plt.show()
 
+def binomial_tree_custom(n):
+    G = nx.empty_graph(1)
+
+    N = 1
+    for i in range(n):
+        # Use G.edges() to ensure 2-tuples. G.edges is 3-tuple for MultiGraph
+        edges = [(u + N, v + N) for (u, v) in G.edges()]
+        G.add_edges_from(edges)
+        G.add_edge(0, N)
+        N *= 2
+    return G
+
 def binomial():
-    n=4
-    graphBinomial = nx.binomial_tree(n)
+    binomial_tree = binomial_tree_custom(6)
     plt.figure(figsize=(12, 8))
 
-    nx.draw(graphBinomial, node_size=4)
+    nx.draw(binomial_tree, node_size=4)
     plt.show()
+
 
 def erdos_renyi():
     graph_erdos_renyi = nx.erdos_renyi_graph(50, 0.2, seed=None, directed=False)
@@ -42,6 +51,13 @@ def star():
     nx.draw(graphStar, node_size=19)
     plt.show()
 
+def balanced():
+    balanced_tree = nx.balanced_tree(4, 3, create_using=None)
+    plt.figure(figsize=(12, 8))
+
+    nx.draw(balanced_tree, node_size=4)
+    plt.show()
+
 def plot_graph(graph, name):
     g = nx.Graph()
     color_map =[]
@@ -56,10 +72,10 @@ def plot_graph(graph, name):
 
 #plot_graph(nx.to_dict_of_dicts(nx.star_graph(20)), "plots/Graph")
 
-
-
+binomial()
+#balanced()
 #watts_strogatz()
 #star()
-barabasi()
+#barabasi()
 #binomial()
 #erdos_renyi()
