@@ -19,6 +19,7 @@ MVC_algorithm = nx.to_dict_of_dicts(graph_barabasi_albert)
 graph_name_used_for_plot = graph_barabasi_albert
 
 
+
 # vertex_cover_approx
 # Generates an approximately optimal vertex cover for a given graph using the APPROX-VERTEX-COVER algorithm
 # found in (Cormen)
