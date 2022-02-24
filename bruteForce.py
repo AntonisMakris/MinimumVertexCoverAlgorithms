@@ -2,19 +2,19 @@ import timeit
 import networkx as nx
 import matplotlib.pyplot as plt
 from operator import itemgetter
+from networkx.algorithms import approximation
 
 # Graphs
-graphBinomial = nx.generators.classic.binomial_tree(4)
+#graphBinomial = nx.generators.classic.binomial_tree(4)
 graphbalanced = nx.generators.classic.balanced_tree(4, 2)
 graphStar = nx.star_graph(10)
-graph_barabasi_albert = nx.barabasi_albert_graph(20, 10)
+graph_barabasi_albert = nx.barabasi_albert_graph(20, 5)
 graph_erdos_renyi = nx.erdos_renyi_graph(20, 0.7, seed=None, directed=False)
 graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 7, 0.7, seed=None)
 
-print("Vertices:", len(graph_newman_watts_strogatz.nodes), "Edges:", len(graph_newman_watts_strogatz.edges))
-MVC_algorithm = nx.to_dict_of_dicts(graph_newman_watts_strogatz)
-graph_name_used_for_plot = graph_newman_watts_strogatz
-
+print("Vertices:", len(graph_barabasi_albert.nodes), "Edges:", len(graph_barabasi_albert.edges))
+MVC_algorithm = nx.to_dict_of_dicts(graph_barabasi_albert)
+graph_name_used_for_plot = graph_barabasi_albert
 
 # vertex_cover_brute checks all possible sets of vertices of size k for a valid cover
 def vertex_cover_brute(graph, res):
@@ -31,6 +31,7 @@ def vertex_cover_brute(graph, res):
                 # since subsets are generated in  increasing size, the first
                 # subset that is cover can be returned as the minimal one
                 res.append(s)
+                print (res)
                 return
     # no cover was found so return set of all edges as minimal cover
     #res.append(vertices)
@@ -102,4 +103,11 @@ graphConnected_data_Brute.append("{0:.3f}".format(time*1000))
 graphConnected_data_Brute.append(1.0)
 graphConnected_data_Brute.append(coverConnected[0])
 print (graphConnected_data_Brute)
+
+print("Length of nodes with images", len(coverConnected[0]))
+print("Length of min_weighted_vertex_cover", len(approximation.min_weighted_vertex_cover(graph_barabasi_albert)))
+approximation_ratio = "{:.2f}".format(len(coverConnected[0]) / len(approximation.min_weighted_vertex_cover(graph_barabasi_albert)))
+print("Approximation Ratio: ", approximation_ratio)
+
+
 plot_graph(nx.to_dict_of_dicts(graph_name_used_for_plot), "plots/Graph")

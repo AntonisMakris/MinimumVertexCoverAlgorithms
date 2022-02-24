@@ -6,16 +6,16 @@ from networkx.algorithms import approximation
 
 # global configuration settings
 # note: keep population_size and elite_population_size of same parity
-population_size = 30
-elite_population_size = 8
+population_size = 20
+elite_population_size = 4
 mutation_probability = 0.04
 num_iterations = 5
 
 # Graphs
-graphBinomial = nx.generators.classic.binomial_tree(4)
+#graphBinomial = nx.generators.classic.binomial_tree(4)
 graphbalanced = nx.generators.classic.balanced_tree(4, 2)
 graphStar = nx.star_graph(10)
-graph_barabasi_albert = nx.barabasi_albert_graph(20, 10)
+graph_barabasi_albert = nx.barabasi_albert_graph(20, 2)
 graph_erdos_renyi = nx.erdos_renyi_graph(20, 0.7, seed=None, directed=False)
 graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 7, 0.7, seed=None)
 

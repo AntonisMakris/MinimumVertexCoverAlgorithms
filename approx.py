@@ -2,20 +2,21 @@ import timeit
 import networkx as nx
 import matplotlib.pyplot as plt
 from operator import itemgetter
+from networkx.algorithms import approximation
 
 # Approximation: https://edutechlearners.com/download/Introduction_to_algorithms-3rd%20Edition.pdf
 
 # Graphs
-graphBinomial = nx.generators.classic.binomial_tree(4)
+#graphBinomial = nx.generators.classic.binomial_tree(4)
 graphbalanced = nx.generators.classic.balanced_tree(4, 2)
 graphStar = nx.star_graph(10)
-graph_barabasi_albert = nx.barabasi_albert_graph(20, 10)
+graph_barabasi_albert = nx.barabasi_albert_graph(25, 4)
 graph_erdos_renyi = nx.erdos_renyi_graph(20, 0.7, seed=None, directed=False)
 graph_newman_watts_strogatz = nx.newman_watts_strogatz_graph(10, 7, 0.7, seed=None)
 
-print("Vertices:", len(graph_newman_watts_strogatz.nodes), "Edges:", len(graph_newman_watts_strogatz.edges))
-MVC_algorithm = nx.to_dict_of_dicts(graph_newman_watts_strogatz)
-graph_name_used_for_plot = graph_newman_watts_strogatz
+print("Vertices:", len(graph_barabasi_albert.nodes), "Edges:", len(graph_barabasi_albert.edges))
+MVC_algorithm = nx.to_dict_of_dicts(graph_barabasi_albert)
+graph_name_used_for_plot = graph_barabasi_albert
 
 
 # vertex_cover_approx
@@ -79,6 +80,11 @@ graphConnected_data_Approx.append("{0:.3f}".format(time*1000))
 graphConnected_data_Approx.append("{0:.3f}".format(ratio))
 graphConnected_data_Approx.append(cover_approx[0])
 print (graphConnected_data_Approx)
+
+print("Length of nodes with images", len(cover_approx[0]))
+print("Length of min_weighted_vertex_cover", len(approximation.min_weighted_vertex_cover(graph_barabasi_albert)))
+approximation_ratio = "{:.2f}".format(len(cover_approx[0]) / len(approximation.min_weighted_vertex_cover(graph_barabasi_albert)))
+print("Approximation Ratio: ", approximation_ratio)
 
 
 plot_graph(nx.to_dict_of_dicts(graph_name_used_for_plot), "plots/Graph")
